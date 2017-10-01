@@ -22,6 +22,7 @@ template<int rows,int columns>
 class MineScene {
 public:
 	    int Data[rows][columns];
+		bool gameover = false;
 		MineScene() = default;
 		MineScene(double density);
 		void PrintScene();
@@ -29,6 +30,7 @@ public:
 		bool TestMine(int row, int column);
 		int  ExamMine(int row, int column);
 		void GameOver();
+		bool Determinewin();
 };
 
 
@@ -77,8 +79,17 @@ MineScene<rows, columns>::MineScene(double density) {
 }
 
 template<int rows,int columns>
+bool MineScene<rows, columns>::Determinewin() {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < rows; j++) {
+			if (Data[i][j] == 0) return 0;
+		}
+	}
+	return 1;
+}
+template<int rows,int columns>
 void MineScene<rows, columns>::RevealMine(int row, int column) {
-	if (Data[rows][columns] == IsMineAndUntouched) {
+	if (Data[row][column] == IsMineAndUntouched) {
 		GameOver();
 		return;
 	}
@@ -103,8 +114,9 @@ void MineScene<rows, columns>::RevealMine(int row, int column) {
 }
 template<int rows, int columns>
 void MineScene<rows, columns>::GameOver() {
-	std::cout << "GameOver!";
+	gameover = true;
 }
+
 //A SB function
 template<int rows,int columns>
 bool MineScene<rows, columns>::TestMine(int row, int column) {
@@ -165,8 +177,6 @@ int MineScene<rows, columns>::ExamMine(int row, int column) {
 		result++;
 	if (column - 1 >= 0 && Data[row][column - 1] == IsMineAndUntouched)
 		result++;
-	if (Data[row][column] == IsMineAndUntouched)
-		result++;
 	if (row + 1 < rows && Data[row + 1][column] == IsMineAndUntouched)
 		result++;
 	if (row + 1 < rows && column + 1 < columns && Data[row + 1][column + 1] == IsMineAndUntouched)
@@ -174,6 +184,8 @@ int MineScene<rows, columns>::ExamMine(int row, int column) {
 	if (row - 1 >= 0 && column + 1 < columns && Data[row - 1][column + 1] == IsMineAndUntouched)
 		result++;
 	if (row + 1 < rows && column - 1 >= 0 && Data[row + 1][column - 1] == IsMineAndUntouched)
+		result++;
+	if (column + 1 < columns && Data[row][column + 1] == IsMineAndUntouched)
 		result++;
 	return result;
 }
