@@ -2,7 +2,7 @@
 //By 78ij
 #ifndef SCENE_H
 #define SCENE_H
-
+//Include Headers
 #include<random>
 #include<vector>
 #include<sys/timeb.h>
@@ -15,9 +15,9 @@
 #define NotMineAndRevealed 2
 #define FlaggedAndIsMine 3
 #define FlaggedAndNotMine 4
-
+//The random function using time as seed
 std::vector<int> random2(int, int);
-
+//The Scene Class
 template<int rows,int columns>
 class MineScene {
 public:
@@ -33,7 +33,7 @@ public:
 		bool Determinewin();
 };
 
-
+//Function used to Print the Scene(Clearing the display area first)
 template<int rows, int columns>
 void MineScene<rows, columns>::PrintScene() {
 	for (int i = 0; i < 30; i++)
@@ -51,6 +51,7 @@ void MineScene<rows, columns>::PrintScene() {
 		std::cout << std::endl;
 	}
 }
+//The constructor of the MineScene Class
 template<int rows, int columns>
 MineScene<rows, columns>::MineScene(double density) {
 	int GridNumber = rows * columns;
@@ -77,7 +78,7 @@ MineScene<rows, columns>::MineScene(double density) {
 		Data[MineCoordinate[i][0]][MineCoordinate[i][1]] = IsMineAndUntouched;
 	}
 }
-
+//Called after every input.Determine whether the player wins.
 template<int rows,int columns>
 bool MineScene<rows, columns>::Determinewin() {
 	for (int i = 0; i < rows; i++) {
@@ -87,6 +88,8 @@ bool MineScene<rows, columns>::Determinewin() {
 	}
 	return 1;
 }
+//One core function.Recursively reveal the Grids.
+//(Reveal the neighbouring 8 Grids if there is no Mines around the revealed Grid)
 template<int rows,int columns>
 void MineScene<rows, columns>::RevealMine(int row, int column) {
 	if (Data[row][column] == IsMineAndUntouched) {
@@ -112,12 +115,14 @@ void MineScene<rows, columns>::RevealMine(int row, int column) {
 	}
 	return;
 }
+//Set the gameover state
 template<int rows, int columns>
 void MineScene<rows, columns>::GameOver() {
 	gameover = true;
 }
 
 //A SB function
+//Examing if there is any Mine around the current Grid
 template<int rows,int columns>
 bool MineScene<rows, columns>::TestMine(int row, int column) {
 	int auxData[rows][columns];
@@ -168,6 +173,7 @@ bool MineScene<rows, columns>::TestMine(int row, int column) {
 	return 0;
 }
 //Another SB function
+//Count the number of mine around the current grid
 template<int rows,int columns>
 int MineScene<rows, columns>::ExamMine(int row, int column) {
 	int result = 0;
@@ -189,6 +195,7 @@ int MineScene<rows, columns>::ExamMine(int row, int column) {
 		result++;
 	return result;
 }
+//The random function
 std::vector<int> random2(int rows, int columns) {
 	struct timeb timeSeed;
 	ftime(&timeSeed);
@@ -203,6 +210,7 @@ std::vector<int> random2(int rows, int columns) {
 	coordinate.push_back(c);
 	return coordinate;
 }
+//A auxilliary function used to judge if the random coordinate is equal to the existing coordinate
 bool isequal(std::vector<int> temp, std::vector<std::vector<int>> target) {
 	for (auto temp2 : target) {
 		if (temp2 == temp)

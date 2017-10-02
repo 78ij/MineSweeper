@@ -6,7 +6,7 @@ int main() {
 	for (int i = 0; i < 30; i++) {
 		std::cout << "\n";
 	}
-	MineScene<20,20> mine(density);
+	MineScene<10,10> mine(density);
 	mine.PrintScene();
 	int row, column;
 	while (true) {
